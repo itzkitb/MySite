@@ -2,102 +2,166 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ItzKITb | Упс...</title>
     
-    <!-- Мета-теги для SEO -->
-    <meta name="description" content="Просто мой сайт">
-	<!-- Мета-теги для социальных сетей -->
-    <!-- Open Graph для Facebook -->
-    <meta property="og:title" content="ItzKITb">
-    <meta property="og:description" content="Просто мой сайт">
-    <meta property="og:image" content="/images/peepohuy.webp">
-    <meta property="og:url" content="https://itzkitb.ru/">
-    <meta property="og:type" content="website">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="peepohuy">
-    <meta name="twitter:title" content="ItzKITb | 404">
-    <meta name="twitter:description" content="Просто мой сайт">
-    <meta name="twitter:image" content="/images/peepohuy.webp">
-    
-    <!-- Фавикон -->
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <meta name="description" content="Просто мой сайт.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Стили -->
-    <link rel="stylesheet" href="https://itzkitb.ru/styles.css">
-	
-	<style>
-		body {
-			background: #070706;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-	</style>
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://itzkitb.lol/">
+    <meta property="og:title" content="ItzKITb | Упс...">
+    <meta property="og:description" content="Просто мой сайт.">
+    <meta property="og:image" content="https://i.api.itzkitb.lol/my_site/peepohuy.webp">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://itzkitb.lol/">
+    <meta name="twitter:title" content="ItzKITb | Упс...">
+    <meta name="twitter:description" content="Просто мой сайт.">
+    <meta name="twitter:image" content="https://i.api.itzkitb.lol/my_site/peepohuy.webp">
+
+    <link rel="icon" href="https://i.api.itzkitb.lol/my_site/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://i.api.itzkitb.lol/my_site/peepohuy.png">
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="backgroundText" class="background-text">
-        404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 404 
-    </div>
-	
-	<!-- Хедер сайта -->
-    <header class="header">
-        <div class="header-logo">
-			<div style="padding-left: 15px;">
-				<a href="/" target="_blank" class="header-logo-text" style="text-decoration: none;">ItzKITЬ</a>
-			</div>
-        </div>
-		<div class="header-menu">
-			<button onclick="document.location='/'" class="button">Проекты</button>
-			<button onclick="document.location='/'" class="button">Обо мне</button>
-			<button onclick="document.location='/'" class="button">Правила</button>
-			<button onclick="document.location='/'" class="button">Бот</button>
+	<div class="cursor"></div>
+	<header>
+		<p class="unselectable">ItzKITb</p>
+		<div class="right disabled_text">
+			<a class="unselectable disabled_text">обо мне</a>
+			<a class="unselectable disabled_text">проекты</a>
+			<a class="unselectable disabled_text">правила</a>
 		</div>
-    </header>
-	
-	<script>
-        const backgroundText = document.getElementById('backgroundText');
-
-        document.addEventListener('mousemove', (event) => {
-            const mouseX = event.clientX;
-            const mouseY = event.clientY;
-
-            // Вычисляем смещение для текста
-            const offsetX = (mouseX / window.innerWidth) * 25 - 25; // Измените 50 и 25 для настройки движения
-            const offsetY = (mouseY / window.innerHeight) * 25 - 25; // Измените 50 и 25 для настройки движения
-
-            // Применяем трансформацию
-            backgroundText.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-        });
-		setInterval(() => {
-            if (window.scrollY !== 0) {
-                window.scrollTo(0, 0);
-            }
-        }, 20);
-    </script>
-	
-	<div class="centerPlease">
-		<main>
-			<!-- Основной контент -->
-			<div id="info" class="blurObject" style="text-align: center;">
-				<p class="title">Страница не найдена</p>
-				<p class="text">Извините, но запрашиваемая страница не существует.</p>
-				<div class="center">
-					<button onclick="document.location='/'" class="button">На главную</button>
-				</div>
-			</div>
-		</main>
-	</div>
-	
-	<footer>
-		<div class="center" style="margin-top: calc(100vh - 45px);">
-			<p class="text">©2024 ItzKITb. Все права защищены.</p>
+	</header>
+	<main class="center" style="height: calc(100vh - 106px); display: block;">
+		<div class="horizontal_box center">
+			<p id="title" class="title orange_font"></p>
+			<p id="title_underline" class="underline no_margin">_</p>
 		</div>
-	</footer>
+		<div class="horizontal_box center">
+			<p id="description" class="font16 light_gray_font"></p>
+			<p id="description_underline" class="underline font16 no_margin">_</p>
+		</div>
+		<div id="console_holder" class="console" style="margin: 15px auto;">
+			<p id="console" class="font16 gray_font no_margin" style="align-content: start;"></p>
+		</div>
+	</main>
+<script>
+// Cursor
+document.addEventListener('DOMContentLoaded', () => {
+    const cursor = document.querySelector('.cursor');
+    if (!cursor) return;
+    
+    let mouseX = -100, mouseY = -100;
+    let cursorX = -100, cursorY = -100;
+    const factor = 0.15;
+
+    const updateCursor = (e) => {
+        const target = document.elementFromPoint(e.clientX, e.clientY);
+        cursor.classList.toggle('active', target?.matches('a, button, [role="button"]'));
+        if (target?.matches('a, button, [role="button"]')) {
+            mouseX = e.clientX - 30;
+            mouseY = e.clientY - 30;
+        }
+        else {
+            mouseX = e.clientX - 20;
+            mouseY = e.clientY - 20;
+        }
+    };
+
+    const animate = () => {
+        cursorX += (mouseX - cursorX) * factor;
+        cursorY += (mouseY - cursorY) * factor;
+        
+        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+        requestAnimationFrame(animate);
+    };
+
+    document.addEventListener('mousemove', updateCursor);
+    animate();
+});
+// Animations
+(function() {
+    const elements = {
+        title: document.querySelector('#title'),
+        titleUnderline: document.querySelector('#title_underline'),
+        description: document.querySelector('#description'),
+        descriptionUnderline: document.querySelector('#description_underline'),
+        console: document.querySelector('#console'),
+        consoleHolder: document.querySelector('#console_holder')
+    };
+
+    if (!Object.values(elements).every(el => el)) return;
+
+    const textAnimator = {
+        renderText(element, text, underline) {
+            let size = 0;
+            const animate = () => {
+                element.textContent = text.substring(0, size);
+                if (size++ < text.length) {
+                    setTimeout(animate, Math.random() * 50 + 50);
+                } else {
+                    underline.style.display = 'none';
+                }
+            };
+            animate();
+        },
+
+        renderLines(element, texts, times) {
+            let line = 0;
+            const animate = () => {
+                if (line >= texts.length) return;
+                element.innerHTML = texts.slice(0, line + 1).join('<br>') + 
+                    '<span class="underline font16 no-margin">_</span>';
+                
+                elements.consoleHolder.scrollTo({
+                    top: elements.consoleHolder.scrollHeight,
+                    behavior: 'smooth'
+                });
+                
+                setTimeout(animate, times[line] || 100);
+                line++;
+            };
+            animate();
+        }
+    };
+
+    // Inititalization
+    elements.console.textContent = '';
+    
+    const consoleData = {
+        lines: [
+            "Balbes console line [Version 1.2.34]",
+            "(C) 2025 ItzKITb inc. All right reserved",
+            "Initializing \"Balbes OS\"...",
+            "Balbes OS initialized!",
+            "",
+            "BOS> Welcome USER!",
+            "",
+            "root> ../OS/progs/siteunit.blbs -url itzkitb.lol/main -t 1000",
+            "Dank site unit | v.1.9.84",
+            "DSU> Connecting...",
+            "DSU> Connection error!",
+            "DSU> Error: This page not found!",
+            "siteunit.blbs exited with code 404",
+            "",
+            "root/safe> "
+        ],
+        timings: [250, 10, 120, 20, 5, 5, 5, 25, 30, 1000, 230, 10, 10, 500]
+    };
+
+    textAnimator.renderLines(elements.console, consoleData.lines, consoleData.timings);
+    
+    setTimeout(() => {
+        textAnimator.renderText(elements.title, "Страница не найдена", elements.titleUnderline);
+        textAnimator.renderText(elements.description, 
+            "Вы достигли края интернета", elements.descriptionUnderline);
+    }, 2500);
+})();
+</script>
 </body>
 </html>
