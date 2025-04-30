@@ -1,0 +1,4 @@
+Sitemap: https://itzkitb.lol/SEO/sitemap.xml
+Crawl-delay: 60
+User-agent: *
+Allow: https://itzkitb.lol/
