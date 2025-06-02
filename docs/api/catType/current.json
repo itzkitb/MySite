@@ -1,0 +1,10 @@
+{
+  "client_version": "1.1.0",
+  "client_build": "3E8",
+  "app_build": "3E8",
+  "chat_uri": "https://itzkitb.lol/api/catType/data.json",
+  "client_updater_uri": "https://itzkitb.lol/api/catType/installer.exe",
+  "necessary_update": true,
+  "client_changes": "ewogICJydSI6ICItINCf0YDQuNC70L7QttC10L3QuNC1INGB0L7Qt9C00LDQvdC+IFBhZ01hbiIsCiAgImVuIjogIi0gQXBwbGljYXRpb24gY3JlYXRlZCBQYWdNYW4iCn0=",
+  "app_changes": "ewogICJydSI6ICItINCf0YDQuNC70L7QttC10L3QuNC1INGB0L7Qt9C00LDQvdC+IFBhZ01hbiIsCiAgImVuIjogIi0gQXBwbGljYXRpb24gY3JlYXRlZCBQYWdNYW4iCn0="
+}
