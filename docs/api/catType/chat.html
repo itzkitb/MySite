@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitch Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #18181b;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #status {
+            background: #9147ff;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .message {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+        }
+        .timestamp {
+            color: #919191;
+            margin-right: 10px;
+            min-width: 50px;
+        }
+        .username {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .emote {
+            height: 1.5em;
+            vertical-align: middle;
+            margin: 0 2px;
+        }
+        #input-container {
+            display: flex;
+            border-top: 1px solid #444;
+            background: #27272a;
+        }
+        #message-input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: #27272a;
+            color: #fff;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="status">Connecting...</div>
+    <div id="chat"></div>
+    <div id="input-container">
+        <input type="text" id="message-input" placeholder="Type a message..." disabled>
+    </div>
+
+    <script>
+        // Получаем параметры из URL
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
+        const login = params.get('login');
+        const timeFormat = params.get('time_format') || 'HH:mm:ss';
+        const emotesSize = parseFloat(params.get('emotes_size')) || 1.0;
+        const channel = params.get('channel');
+
+        const statusEl = document.getElementById('status');
+        const chatEl = document.getElementById('chat');
+        const inputEl = document.getElementById('message-input');
+
+        let socket;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 5;
+
+        function parseIRCMessage(line) {
+                const tags = {};
+                let prefix = '';
+                let command = '';
+                let params = [];
+
+                // Парсим теги
+                if (line.startsWith('@')) {
+                    const tagEnd = line.indexOf(' ');
+                    const tagString = line.slice(1, tagEnd);
+                    line = line.slice(tagEnd + 1);
+            
+                    tagString.split(';').forEach(tag => {
+                        const [key, value] = tag.split('=');
+                        tags[key] = value || '';
+                    });
+                }
+
+                // Парсим префикс
+                if (line.startsWith(':')) {
+                    const prefixEnd = line.indexOf(' ');
+                    prefix = line.slice(1, prefixEnd);
+                    line = line.slice(prefixEnd + 1);
+                }
+
+                // Парсим команду
+                const commandEnd = line.indexOf(' ');
+                command = line.slice(0, commandEnd);
+                line = line.slice(commandEnd + 1);
+
+                // Парсим параметры
+                while (line.length > 0) {
+                    if (line.startsWith(':')) {
+                        params.push(line.slice(1));
+                        line = '';
+                    } else {
+                        const spaceIndex = line.indexOf(' ');
+                        if (spaceIndex === -1) {
+                            params.push(line);
+                            line = '';
+                        } else {
+                            params.push(line.slice(0, spaceIndex));
+                            line = line.slice(spaceIndex + 1);
+                        }
+                    }
+                }
+
+                return { tags, prefix, command, params };
+            }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            
+            return timeFormat
+                .replace('HH', hours)
+                .replace('mm', minutes)
+                .replace('ss', seconds);
+        }
+
+        function addMessage(message, tags) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message';
+
+            // Время
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'timestamp';
+            timeSpan.textContent = formatTime(tags['tmi-sent-ts'] ? parseInt(tags['tmi-sent-ts']) : Date.now());
+            msgDiv.appendChild(timeSpan);
+
+            // Имя пользователя
+            const userSpan = document.createElement('span');
+            userSpan.className = 'username';
+            userSpan.textContent = (tags['display-name'] || tags.username || 'undefined') + ': ';
+            msgDiv.appendChild(userSpan);
+
+            // Сообщение
+            const messageSpan = document.createElement('span');
+            messageSpan.innerHTML = replaceEmotes(message, tags['emotes']);
+            msgDiv.appendChild(messageSpan);
+
+            chatEl.appendChild(msgDiv);
+            chatEl.scrollTop = chatEl.scrollHeight;
+        }
+
+        function replaceEmotes(text, emotes) {
+            if (!emotes) return text;
+
+            const emoteMap = {};
+            emotes.split('/').forEach(part => {
+                const [id, positions] = part.split(':');
+                positions.split(',').forEach(pos => {
+                    const [start, end] = pos.split('-');
+                    emoteMap[`${start}-${end}`] = id;
+                });
+            });
+
+            const parts = [];
+            let lastIndex = 0;
+
+            Object.entries(emoteMap).forEach(([key, id]) => {
+                const [start, end] = key.split('-').map(Number);
+                if (start >= lastIndex) {
+                    if (start > lastIndex) {
+                        parts.push(text.substring(lastIndex, start));
+                    }
+                    const img = document.createElement('img');
+                    img.className = 'emote';
+                    img.src = `https://static-cdn.jtvnw.net/emoticons/v2/${id}/default/dark/3.0`; 
+                    img.style.height = `${1.5 * emotesSize}em`;
+                    parts.push(img.outerHTML);
+                    lastIndex = end + 1;
+                }
+            });
+
+            if (lastIndex < text.length) {
+                parts.push(text.substring(lastIndex));
+            }
+
+            return parts.join('');
+        }
+
+        function sendMessage(message) {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+				console.log(message);
+                socket.send(`PRIVMSG #${channel} :${message}`);
+				console.log(`PRIVMSG #${channel} :${message}`);
+            }
+        }
+
+        function connect() {
+            statusEl.textContent = 'Connecting...';
+            statusEl.style.backgroundColor = '#9147ff';
+            
+            socket = new WebSocket('wss://irc-ws.chat.twitch.tv:443');
+
+            socket.onopen = () => {
+                console.log('WebSocket connected');
+                socket.send(`PASS ${token}`);
+				console.log(`PASS ${token}`);
+                socket.send(`NICK ${login}`);
+				console.log(`NICK ${login}`);
+                socket.send(`JOIN #${channel}`);
+				console.log(`JOIN #${channel}`);
+				socket.send('CAP REQ :twitch.tv/membership twitch.tv/tags twitch.tv/commands');
+				console.log('CAP REQ :twitch.tv/membership twitch.tv/tags twitch.tv/commands');
+                reconnectAttempts = 0;
+                statusEl.textContent = 'Connected';
+                statusEl.style.backgroundColor = '#4caf50';
+            };
+
+            socket.onmessage = (event) => {
+                const line = event.data.trim();
+				console.log('[TW-IRC] ' + line)
+    
+                if (line.startsWith('PING')) {
+                    socket.send('PONG');
+                    return;
+                }
+
+                const parsed = parseIRCMessage(line);
+    
+                switch(parsed.command) {
+                    case 'PRIVMSG':
+                        const username = parsed.tags['display-name'] || parsed.tags.username || 'User';
+                        const message = parsed.params[1];
+                        addMessage(message, parsed.tags);
+                        break;
+            
+                    case 'NOTICE':
+                        if (parsed.params[1].includes('Login authentication failed')) {
+                            statusEl.textContent = 'Authentication failed';
+                            statusEl.style.backgroundColor = '#f44336';
+                        }
+                        break;
+            
+                    case 'CLEARCHAT':
+                        if (parsed.params[1]) {
+                            const user = parsed.params[1];
+                            addSystemMessage(`Message from ${user} was cleared`);
+                        } else {
+                            chatEl.innerHTML = '';
+                            addSystemMessage('Chat was cleared');
+                        }
+                        break;
+                }
+            };
+
+            socket.onclose = (event) => {
+                console.log('WebSocket closed:', event.reason);
+                statusEl.textContent = 'Disconnected';
+                statusEl.style.backgroundColor = '#f44336';
+                
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    setTimeout(() => {
+                        reconnectAttempts++;
+                        statusEl.textContent = `Connection timed out. Reconnecting... (${reconnectAttempts}/${maxReconnectAttempts})`;
+                        connect();
+                    }, 5000);
+                }
+            };
+
+            socket.onerror = (error) => {
+                console.error('WebSocket Error:', error);
+                socket.close();
+            };
+        }
+
+        inputEl.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && inputEl.value.trim()) {
+                sendMessage(inputEl.value);
+                inputEl.value = '';
+            }
+        });
+		
+		function addSystemMessage(text) {
+ 		    const msgDiv = document.createElement('div');
+  		    msgDiv.className = 'message';
+    
+   		    const timeSpan = document.createElement('span');
+   		    timeSpan.className = 'timestamp';
+    		timeSpan.textContent = formatTime(Date.now());
+    		msgDiv.appendChild(timeSpan);
+    
+    		const systemSpan = document.createElement('span');
+    		systemSpan.style.color = '#888';
+    		systemSpan.textContent = `[${text}]`;
+    		msgDiv.appendChild(systemSpan);
+    
+    		chatEl.appendChild(msgDiv);
+    		chatEl.scrollTop = chatEl.scrollHeight;
+		}
+
+        connect();
+    </script>
+</body>
+</html>
