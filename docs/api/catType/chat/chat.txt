@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitch Chat</title>
+    <style>
+        %styles%
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    %google-fonts%
+</head>
+<body>
+    <div id="tab-bar">
+        <div id="tabs-container"></div>
+        <button id="add-tab-btn">+</button>
+    </div>
+    <div id="input-container">
+        <input type="text" id="message-input" placeholder="Type a message...">
+    </div>
+
+    <script id="main-script">
+        // Kitb was here
+
+        %main-script%
+    </script>
+    %addons-scripts%
+</body>
+</html>
