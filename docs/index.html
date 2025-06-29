@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>ItzKITb | Технические работы</title>
-    
+
     <meta name="description" content="Просто мой сайт.">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://itzkitb.lol/">
@@ -22,146 +22,40 @@
     <link rel="icon" href="https://i.api.itzkitb.lol/my_site/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="https://i.api.itzkitb.lol/my_site/peepohuy.png">
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./styles/pages/tech_works.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-	<div class="cursor"></div>
-	<header>
-		<p class="unselectable">ItzKITb</p>
-		<div class="right disabled_text">
-			<a class="unselectable disabled_text">обо мне</a>
-			<a class="unselectable disabled_text">проекты</a>
-			<a class="unselectable disabled_text">правила</a>
-		</div>
-	</header>
-	<main class="center" style="height: calc(100vh - 106px); display: block;">
-		<div class="horizontal_box center">
-			<p id="title" class="title orange_font"></p>
-			<p id="title_underline" class="underline no_margin">_</p>
-		</div>
-		<div class="horizontal_box center">
-			<p id="description" class="font16 light_gray_font"></p>
-			<p id="description_underline" class="underline font16 no_margin">_</p>
-		</div>
-		<div id="console_holder" class="console" style="margin: 15px auto;">
-			<p id="console" class="font16 gray_font no_margin" style="align-content: start;"></p>
-		</div>
-	</main>
-<script>
-// Cursor
-document.addEventListener('DOMContentLoaded', () => {
-    const cursor = document.querySelector('.cursor');
-    if (!cursor) return;
-    
-    let mouseX = -100, mouseY = -100;
-    let cursorX = -100, cursorY = -100;
-    const factor = 0.15;
-
-    const updateCursor = (e) => {
-        const target = document.elementFromPoint(e.clientX, e.clientY);
-        cursor.classList.toggle('active', target?.matches('a, button, [role="button"]'));
-        if (target?.matches('a, button, [role="button"]')) {
-            mouseX = e.clientX - 30;
-            mouseY = e.clientY - 30;
-        }
-        else {
-            mouseX = e.clientX - 20;
-            mouseY = e.clientY - 20;
-        }
-    };
-
-    const animate = () => {
-        cursorX += (mouseX - cursorX) * factor;
-        cursorY += (mouseY - cursorY) * factor;
-        
-        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
-        requestAnimationFrame(animate);
-    };
-
-    document.addEventListener('mousemove', updateCursor);
-    animate();
-});
-// Animations
-(function() {
-    const elements = {
-        title: document.querySelector('#title'),
-        titleUnderline: document.querySelector('#title_underline'),
-        description: document.querySelector('#description'),
-        descriptionUnderline: document.querySelector('#description_underline'),
-        console: document.querySelector('#console'),
-        consoleHolder: document.querySelector('#console_holder')
-    };
-
-    if (!Object.values(elements).every(el => el)) return;
-
-    const textAnimator = {
-        renderText(element, text, underline) {
-            let size = 0;
-            const animate = () => {
-                element.textContent = text.substring(0, size);
-                if (size++ < text.length) {
-                    setTimeout(animate, Math.random() * 50 + 50);
-                } else {
-                    underline.style.display = 'none';
-                }
-            };
-            animate();
-        },
-
-        renderLines(element, texts, times) {
-            let line = 0;
-            const animate = () => {
-                if (line >= texts.length) return;
-                element.innerHTML = texts.slice(0, line + 1).join('<br>') + 
-                    '<span class="underline font16 no-margin">_</span>';
-                
-                elements.consoleHolder.scrollTo({
-                    top: elements.consoleHolder.scrollHeight,
-                    behavior: 'smooth'
-                });
-                
-                setTimeout(animate, times[line] || 100);
-                line++;
-            };
-            animate();
-        }
-    };
-
-    // Inititalization
-    elements.console.textContent = '';
-    
-    const consoleData = {
-        lines: [
-            "Balbes console line [Version 1.2.34]",
-            "(C) 2025 ItzKITb inc. All right reserved",
-            "Initializing \"Balbes OS\"...",
-            "Balbes OS initialized!",
-            "",
-            "BOS> Welcome USER!",
-            "",
-            "root> ../OS/progs/siteunit.blbs -url itzkitb.lol/main -t 1000",
-            "Dank site unit | v.1.9.84",
-            "DSU> Connecting...",
-            "DSU> Connection error!",
-            "DSU> Error: The site is currently undergoing maintenance!",
-            "siteunit.blbs exited with code 503",
-            "",
-            "root/safe> "
-        ],
-        timings: [250, 10, 120, 20, 5, 5, 5, 25, 30, 1000, 230, 10, 10, 500]
-    };
-
-    textAnimator.renderLines(elements.console, consoleData.lines, consoleData.timings);
-    
-    setTimeout(() => {
-        textAnimator.renderText(elements.title, "Тех. работы", elements.titleUnderline);
-        textAnimator.renderText(elements.description, 
-            "Скоро будет готово...                  Наверное...", elements.descriptionUnderline);
-    }, 2500);
-})();
-</script>
+    <div id="content">
+        <div class="cursor"></div>
+        <header>
+            <div class="header-box"></div>
+            <p class="unselectable">ItzKITb</p>
+            <div class="right disabled_text">
+                <a class="unselectable disabled_text">обо мне</a>
+                <a class="unselectable disabled_text">проекты</a>
+                <a class="unselectable disabled_text">правила</a>
+            </div>
+        </header>
+        <main class="center" style="height: 100vh; display: block;">
+            <div class="horizontal_box center">
+                <p id="title" class="title orange_font"></p>
+                <p id="title_underline" class="underline no_margin">_</p>
+            </div>
+            <div class="horizontal_box center">
+                <p id="description" class="font16 light_gray_font text-center"></p>
+                <p id="description_underline" class="underline font16 no_margin">_</p>
+            </div>
+            <div id="console_holder" class="console" style="margin: 15px auto;">
+                <p id="console" class="font16 gray_font no_margin" style="align-content: start;"></p>
+            </div>
+        </main>
+    </div>
+    <div id="intro"><div id="intro-shape"></div></div>
+    <script src="./scripts/cursor.js"></script>
+    <script src="./scripts/tech-works.js"></script>
+    <script src="./scripts/intro.js"></script>
 </body>
 </html>
